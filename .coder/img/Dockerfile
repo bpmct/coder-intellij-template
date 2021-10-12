@@ -1,7 +1,25 @@
 # See our guides for writing custom images:
 # https://coder.com/docs/guides/customization
 
-FROM codercom/enterprise-base:ubuntu
+FROM codercom/enterprise-java:ubuntu
 
-# Install programs
-# RUN apt-get update && apt-get install -y ...
+# Run everything as root
+USER root
+
+# Packages required for multi-editor support
+RUN DEBIAN_FRONTEND="noninteractive" apt-get install -y \
+    libxtst6 \
+    libxrender1 \
+    libfontconfig1 \
+    libxi6 \
+    libgtk-3-0
+
+# Install intellij
+RUN mkdir -p /opt/idea
+RUN curl -L "https://download.jetbrains.com/product?code=IIC&latest&distribution=linux" | tar -C /opt/idea --strip-components 1 -xzvf -
+
+# Add a binary to the PATH that points to the intellij startup script.
+RUN ln -s /opt/idea/bin/idea.sh /usr/bin/intellij-idea-community
+
+# Set back to coder user
+USER coder
