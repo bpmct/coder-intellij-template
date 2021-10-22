@@ -12,7 +12,7 @@ apps:
     # Array of arguments for command
     args:
       [
-        "/coder/apps/local-app-helper.py",
+        "/coder/apps/local-app-helper/app.py",
         "--listen-port=7032",
         "--start-command",
         "/coder/apps/jetbrains-gateway/start.sh",

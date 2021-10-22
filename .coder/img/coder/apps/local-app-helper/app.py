@@ -40,7 +40,7 @@ def instructions():
 
         return render_template(
             'jetbrains.html',
-            title=("Opening \"% s\" in JetBrains Gateway" % (os.environ.get('CODER_ENVIRONMENT_NAME'))),
+            title=("How to open \"% s\" in JetBrains Gateway" % (os.environ.get('CODER_ENVIRONMENT_NAME'))),
             url=result.stdout
         )
     
@@ -50,7 +50,7 @@ def instructions():
 
         return render_template(
             'vscode.html',
-            title=("Opening \"% s\" in VS Code - Remote SSH" % (os.environ.get('CODER_ENVIRONMENT_NAME'))),
+            title=("How to open \"% s\" in VS Code - Remote SSH" % (os.environ.get('CODER_ENVIRONMENT_NAME'))),
             url=url
         )
 
