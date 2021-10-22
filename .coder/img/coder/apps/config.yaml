@@ -1,0 +1,51 @@
+apps: 
+  - name: JetBrains Gateway
+    scheme: http
+    host: "localhost"
+    port: 7032
+    # Working directory
+    working-directory: /home/coder
+    # File path to icon used in application launcher
+    icon-path: /coder/apps/jetbrains-gateway/icon.png
+    # Use the devurl_redizrect script to run JupyterLab and access via a subdomain
+    command: /usr/bin/python3
+    # Array of arguments for command
+    args:
+      [
+        "/coder/apps/local-app-helper/app.py",
+        "--listen-port=7032",
+        "--start-command",
+        "/coder/apps/jetbrains-gateway/start.sh",
+        "--app=jetbrains",
+        "--directory=/home/coder"
+      ]
+    health-check:
+      # check redirect server
+      http:
+        scheme: "http"
+        port: 7032
+        path: "/health"
+  # - name: VS Code Remote
+  #   scheme: http
+  #   host: "localhost"
+  #   port: 7033
+  #   # Working directory
+  #   working-directory: /home/coder
+  #   # File path to icon used in application launcher
+  #   icon-path: /coder/apps/vscode-remote/icon.png
+  #   # Use the devurl_redizrect script to run JupyterLab and access via a subdomain
+  #   command: /usr/bin/python3
+  #   # Array of arguments for command
+  #   args:
+  #     [
+  #       "/coder/apps/local-app-helper/app.py",
+  #       "--listen-port=7033",
+  #       "--app=vscode",
+  #       "--directory=/home/coder"
+  #     ]
+  #   health-check:
+  #     # check redirect server
+  #     http:
+  #       scheme: "http"
+  #       port: 7033
+  #       path: "/health"

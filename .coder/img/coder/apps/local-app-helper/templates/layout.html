@@ -1,0 +1,30 @@
+<!doctype html>
+<html>
+
+  <head>
+    <title>{{title}}</title>
+    <meta charset="utf-8">
+    <meta name="description" content={{description}}>
+    <style type="text/css">
+        body {
+            font-family: sans-serif;
+            padding: 24px;
+        }
+        h1 {
+            margin-top: 0px
+        }
+        li {
+            margin-bottom: 8px;
+        }
+        code {
+            background-color: black;
+            color: #fff
+        }
+    </style>
+  </head>
+
+  <body>
+    {% block content %}{% endblock %}
+  </body>
+
+</html>

@@ -1,0 +1,16 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+    <div class="container">
+        <h1>{{title}}</h1>
+        <strong>Prerequisites:</strong>
+        <ul>
+            <li>Install <a href="https://coder.com/docs/coder/v1.24/cli/installation" target="_blank">coder-cli</a> on your local machine</li>
+            <li>Run <code>coder login</code> and <code>coder config-ssh</code></li> 
+            <li>Install VS Code and the <a href="https://code.visualstudio.com/docs/remote/ssh" target="_blank">Remote - SSH</a> extension on your local machine</li> 
+        </ul>
+
+        <strong>Open this workspace in VS Code - Remote SSH:</strong>
+        <p><a href="{{url}}">{{url}}</a></p>
+    </div>
+{% endblock %}

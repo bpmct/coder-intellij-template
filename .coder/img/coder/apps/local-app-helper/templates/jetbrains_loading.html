@@ -1,0 +1,12 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+    <div class="container">
+        <h1>Launcing the remote dev server...</h1>
+        <p>This should take rougly 10 seconds. Check <code>/home/coder/jetbrains-dev-server.log</code> if this page persists...
+        <br />
+        <pre>
+            {{description}}
+        </pre>
+    </div>
+{% endblock %}
