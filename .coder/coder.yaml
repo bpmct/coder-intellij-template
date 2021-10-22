@@ -10,7 +10,7 @@ workspace:
       image:
         value: bencdr/coder-intellij:latest # Rename to the same as your image
       container-based-vm:
-        value: false
+        value: true
       memory:
         value: 8
       disk:
