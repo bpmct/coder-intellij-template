@@ -1,5 +1,5 @@
 apps: 
-  - name: IntelliJ Gateway
+  - name: JetBrains Gateway
     scheme: http
     host: "localhost"
     port: 7032
