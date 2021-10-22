@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
 
-import os, sys, re, requests, argparse
+from flask import Flask, render_template
+import os, sys, subprocess, re, requests, argparse
 
-from http.server import HTTPServer, BaseHTTPRequestHandler
+app = Flask(__name__)
 
 # arguments
 parser = argparse.ArgumentParser()
 parser.add_argument("-p", "--listen-port", dest = "listen_port", default=8888, type=int)
 parser.add_argument("-d", "--directory", dest = "directory", default="/home/coder")
-parser.add_argument("-a", "--app", dest = "app", default="jetbrains", choices=['vscode', 'jetbrains'])
-# TODO: impliment parser.add_argument("-n", "--devurl_name", dest = "devurl_name")
+parser.add_argument("-a", "--app", dest = "application", default="jetbrains", choices=['vscode', 'jetbrains'])
 parser.add_argument("-s", "--start-command", dest = "start_command", default="false")
 
 args = parser.parse_args()
@@ -19,51 +19,40 @@ if args.start_command != "false":
     import subprocess
     subprocess.Popen(args.start_command.split ( ), close_fds=False)
 
-class Redirect(BaseHTTPRequestHandler):
+@app.route('/health')
+def health():
+    return 'OK'
 
-    def do_HEAD(self):
-        # for Coder health checks
-        self.send_response(200)
-        self.end_headers()
+@app.route('/')
+def instructions():
 
-    def do_GET(self):
-        # redirect to proper dev URL :)
+    if args.application == "jetbrains":
 
-        # also for health check
-        if self.path == '/health':
-            self.send_response(200)
-            self.send_header('Content-type','text/html')
-            self.end_headers()
-            self.wfile.write(bytes("All OK", "utf8"))
-            return
-        
-        try:
-            devurl_host = response.json()['devurl_host']
-        except:
-            # will fail if non 200 status code
-            # or if dev url host is empty
-
-            # dev URL not found
-            self.send_response(200)
-            self.send_header('Content-type','text/html')
-            self.end_headers()
-
-            self.wfile.write(bytes("Error: Could not get Dev URL host. After fixing, you may need to rebuild this workspace", "utf8"))
-            return
-
-        # check if the access URL is http or https :)
-        if os.environ.get('CODER_URL').find("https") != -1:
-            schema="https"
-        else:
-            schema="http"
-        
-        # Redirect to the proper dev URL
-        url = ("% s://% s-% s-% s.% s" % (schema, args.redirect_port, os.environ.get('CODER_ENVIRONMENT_NAME'), os.environ.get('CODER_USERNAME'), devurl_host))
-        print ("Redirecting to " + url)
-        self.send_response(302)
-        self.send_header('Location', url)
-        self.end_headers()
+        # get the URL
+        result = subprocess.run(["/bin/bash", "/coder/apps/jetbrains-gateway/find_url.sh"], capture_output=True, text=True)
+    
+        if not result.stdout:
+            return render_template(
+                'jetbrains_loading.html',
+                description=result.stderr,
+            ),{"Refresh": "1; url=."}
 
 
-print("Starting redirect server on port", args.listen_port)
-HTTPServer(("", int(args.listen_port)), Redirect).serve_forever()
+        return render_template(
+            'jetbrains.html',
+            title=("Opening \"% s\" in JetBrains Gateway" % (os.environ.get('CODER_ENVIRONMENT_NAME'))),
+            url=result.stdout
+        )
+    
+    elif args.application == "vscode":
+
+        url = ("vscode://vscode-remote/ssh-remote+coder.% s% s" % (os.environ.get('CODER_ENVIRONMENT_NAME'), args.directory))
+
+        return render_template(
+            'vscode.html',
+            title=("Opening \"% s\" in VS Code - Remote SSH" % (os.environ.get('CODER_ENVIRONMENT_NAME'))),
+            url=url
+        )
+
+if __name__ == '__main__':
+    app.run(debug=True, port=args.listen_port)
