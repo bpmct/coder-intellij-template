@@ -30,5 +30,10 @@ RUN ln -s /opt/idea/bin/idea.sh /usr/bin/intellij-idea-community
 # Copy Coder folder (apps and configure)
 COPY coder /coder 
 
+# Install requirements for the local-app-helper
+RUN pip3 install -r /coder/apps/local-app-helper/requirements.txt
+
 # Set back to coder user
 USER coder
+
+ENV PATH=/home/coder/.local/bin:$PATH
