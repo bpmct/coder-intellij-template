@@ -14,15 +14,12 @@ RUN DEBIAN_FRONTEND="noninteractive" apt-get install -y \
     libxi6 \
     libgtk-3-0
 
-# Install IntelliJ IDEA (early access)
-# 
-# this is a pre-release version and may contain bugs
-# however, we need it to run JetBrains Gateway
+# Install IntelliJ IDEA (2021.3.1)
 #
 # this will be used for the remote-dev-server as well as
 # for JetBrains Projector in the web browser
 RUN mkdir -p /opt/idea
-RUN curl -L "https://download.jetbrains.com/idea/ideaIU-213.5281.15.tar.gz" | tar -C /opt/idea --strip-components 1 -xzvf -
+RUN curl -L "https://download.jetbrains.com/idea/ideaIU-2021.3.1.tar.gz" | tar -C /opt/idea --strip-components 1 -xzvf -
 
 # Add a binary to the PATH that points to the intellij startup script.
 RUN ln -s /opt/idea/bin/idea.sh /usr/bin/intellij-idea-community
