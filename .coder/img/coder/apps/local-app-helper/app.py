@@ -26,31 +26,35 @@ def health():
 @app.route('/')
 def instructions():
 
-    if args.application == "jetbrains":
+    # grab Coder URL
 
-        # get the URL
+    # grab home directory
+
+    with open(os.path.expanduser('~/.config/coder/url')) as f:
+        coder_url = f.read()
+        f.close()
+
+    if args.application == "jetbrains":
+        # get the connection URL
         result = subprocess.run(["/bin/bash", "/coder/apps/jetbrains-gateway/find_url.sh"], capture_output=True, text=True)
-    
         if not result.stdout:
             return render_template(
                 'jetbrains_loading.html',
                 description=result.stderr,
             ),{"Refresh": "1; url=."}
-
-
         return render_template(
             'jetbrains.html',
             title=("How to open \"% s\" in JetBrains Gateway" % (os.environ.get('CODER_ENVIRONMENT_NAME'))),
+            coder_url=coder_url,
             url=result.stdout
         )
     
     elif args.application == "vscode":
-
         url = ("vscode://vscode-remote/ssh-remote+coder.% s% s" % (os.environ.get('CODER_ENVIRONMENT_NAME'), args.directory))
-
         return render_template(
             'vscode.html',
             title=("How to open \"% s\" in VS Code - Remote SSH" % (os.environ.get('CODER_ENVIRONMENT_NAME'))),
+            coder_url=coder_url,
             url=url
         )
 

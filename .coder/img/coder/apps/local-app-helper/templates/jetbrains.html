@@ -1,16 +1,19 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-    <div class="container">
-        <h1>{{title}}</h1>
-        <strong>Prerequisites:</strong>
-        <ul>
-            <li>Install <a href="https://coder.com/docs/coder/v1.24/cli/installation">coder-cli</a> on your local machine</li>
-            <li>Run <code>coder login</code> and <code>coder config-ssh</code></li> 
-            <li>Install <a href="https://blog.jetbrains.com/idea/2021/10/intellij-idea-2021-3-eap-4/#how_to_enable_remote_development_mode" target="_blank">JetBrains remote gateway</a> on your local machine</li> 
-        </ul>
+<div class="container">
+    <h1>{{title}}</h1>
+    <strong>Prerequisites:</strong>
+    <ul>
+        <li>Install <a href="https://coder.com/docs/coder/v1.24/cli/installation">coder-cli</a> on your local machine
+        </li>
+        <li>Run <code>coder login {{coder_url}} && coder config-ssh</code></li>
+        <li>Install <a
+                href="https://blog.jetbrains.com/idea/2021/10/intellij-idea-2021-3-eap-4/#how_to_enable_remote_development_mode"
+                target="_blank">JetBrains remote gateway</a> on your local machine</li>
+    </ul>
 
-        <strong>Launch the IDE:</strong>
-        <p><a href="{{url}}">{{url}}</a></p>
-    </div>
+    <strong>Launch the IDE:</strong>
+    <p><a href="{{url}}">{{url}}</a></p>
+</div>
 {% endblock %}
